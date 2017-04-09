@@ -1,41 +1,51 @@
+/*prints the post order traversal of the 
+tree */
 #include <iostream>
+#include <stack>
+#include <map>
 
 using namespace std;
 
 //Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// A utility function to search x in arr[] of size n
-int search(int arr[], int x, int n) {
-    for (int i = 0; i < n; i++)
-        if (arr[i] == x)
-            return i;
-    return -1;
+void BinaryTreeFromPreorderInorderHelper(int preorder[], int preorderStart, int preorderEnd,
+                                         int inorderStart, int inorderEnd, map<int, int> &nodeToInorderIdx,
+                                         stack<int> &postOrderStack) {
+    if (preorderEnd <= preorderStart || inorderEnd <= inorderStart)
+        return;
+
+    int rootInorderIndex = nodeToInorderIdx[preorder[preorderStart]];
+    int leftSubtreeSize = rootInorderIndex - inorderStart;
+
+    postOrderStack.push(preorder[preorderStart]);
+
+    BinaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1 + leftSubtreeSize, preorderEnd, rootInorderIndex + 1, inorderEnd, nodeToInorderIdx, postOrderStack);
+    BinaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1, preorderStart + leftSubtreeSize + 1, inorderStart, rootInorderIndex, nodeToInorderIdx, postOrderStack);
 }
 
-//Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// Prints postorder traversal from given inorder and preorder traversals
+// Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
 void printPostOrder(int in[], int pre[], int n) {
-    // The first element in pre[] is always root, search it
-    // in in[] to find left and right subtrees
-    int root = search(in, pre[0], n);
+    map<int, int> nodeToInorderIdx;
 
-    // If left subtree is not empty, print left subtree
-    if (root != 0)
-        printPostOrder(in, pre + 1, root);
+    for (int i = 0; i < n; i++) {
+        nodeToInorderIdx.emplace(in[i], i);
+    }
 
-    // If right subtree is not empty, print right subtree
-    if (root != n - 1)
-        printPostOrder(in + root + 1, pre + root + 1, n - root - 1);
+    stack<int> postOrderStack;
 
-    // Print root
-    cout << pre[0] << " ";
+    BinaryTreeFromPreorderInorderHelper(pre, 0, n, 0, n, nodeToInorderIdx, postOrderStack);
+
+    while (!postOrderStack.empty()) {
+        cout << postOrderStack.top() << " ";
+        postOrderStack.pop();
+    }
 }
 
-// Driver program to test above functions
 int main() {
-    int in[] = {4, 2, 5, 1, 3, 6};
-    int pre[] = {1, 2, 4, 5, 3, 6};
+    int in[] = {1,2,3,4,5,6,7,8};
+    int pre[] = {5,2,1,4,3,7,6,8};
     int n = sizeof(in) / sizeof(in[0]);
     cout << "\tPostorder traversal " << endl;
+    cout << "\t";
     printPostOrder(in, pre, n);
     cout << endl;
     return 0;
