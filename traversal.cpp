@@ -40,13 +40,28 @@ void printPostOrder(int in[], int pre[], int n) {
     }
 }
 
-int main() {
-    int in[] = {1,2,3,4,5,6,7,8};
-    int pre[] = {5,2,1,4,3,7,6,8};
-    int n = sizeof(in) / sizeof(in[0]);
-    cout << "\tPostorder traversal " << endl;
-    cout << "\t";
-    printPostOrder(in, pre, n);
-    cout << endl;
+int main(int argc, char * argv[]) {
+    // if(argc < 2) {
+    //     //std::cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
+    //     return 1;
+    // }
+    // ArgumentManager am(argc, argv);
+    // std::string fpreorder = am.get("preorder");
+    // std::string finorder = am.get("inorder");
+    // ifstream fspreorder(fpreorder, ios::in);
+    // ifstream fsinorder(finorder, ios::in);
+    ifstream fspreorder("preorder1.txt", ios::in);
+    ifstream fsinorder("inorder1.txt", ios::in);
+    string spreorder;
+    string sinorder;    
+
+
+    // int in[] = {1,2,3,4,5,6,7,8};
+    // int pre[] = {5,2,1,4,3,7,6,8};
+    // int n = sizeof(in) / sizeof(in[0]);
+    // cout << "\tPostorder traversal " << endl;
+    // cout << "\t";
+    // printPostOrder(in, pre, n);
+    // cout << endl;
     return 0;
 }
