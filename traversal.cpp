@@ -1,90 +1,156 @@
-/*prints the post order traversal of the 
-tree */
 #include <iostream>
 #include <stack>
-#include <map>
 #include <fstream>
+#include <string>
+#include <deque>
+#include <vector>
 #include "ArgumentManager.h"
 
 using namespace std;
 
-// //Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// void BinaryTreeFromPreorderInorderHelper(string preorder[], int preorderStart, int preorderEnd,
-//                                          int inorderStart, int inorderEnd, map<string, string> &nodeToInorderIdx,
-//                                          stack<int> &postOrderStack) {
-//     if (preorderEnd <= preorderStart || inorderEnd <= inorderStart)
-//         return;
+class BigNumber {
+public:
+    BigNumber() {}
 
-//     string rootInorderIndex = nodeToInorderIdx[preorder[preorderStart]];
-//     string leftSubtreeSize = rootInorderIndex - inorderStart;
+    ~BigNumber(){ /*cout << "BN ~" << endl;*/ }
 
-//     postOrderStack.push(preorder[preorderStart]);
+    BigNumber(string str) {
+		int index = 0;
+        while (index < str.size()) {
+			if (!isspace(str.at(index))) {
+				int length = 1;
+				while (isspace(str.at(length)) == 0) {
+					length++;
+				}
+				data.push_back(str.substr(index, length));
+			}
+            index++;
+        }
+    }
 
-//     BinaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1 + leftSubtreeSize, preorderEnd, rootInorderIndex + 1, inorderEnd, nodeToInorderIdx, postOrderStack);
-//     BinaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1, preorderStart + leftSubtreeSize + 1, inorderStart, rootInorderIndex, nodeToInorderIdx, postOrderStack);
+    BigNumber(BigNumber const & other) {
+        //cout << "BN copy" << endl;
+        data = other.data;
+    }
+
+    BigNumber & operator= (BigNumber const & other) {
+        //cout << "BN =" << endl;
+        data = other.data;
+        return *this;
+    }
+
+    void swap(BigNumber & other) {
+        data.swap(other.data);
+    }
+
+    void postorder(BigNumber & inorder, BigNumber & preorder) {
+		string root = preorder.data.at(0);
+		cout << root << endl;
+        //find first element of preorder in inorder
+        //Everything to the left of inorder is in the left subtree
+        //Everything to the right of inorder is in the right subtree
+        //place first element of preorder into a stack
+    }
+
+private:
+    deque<string> data;
+};
+
+int size(string str) {
+    int size = 0;
+	for (int i = 0; i < str.size(); ++i) {
+		if (!isspace(str.at(i))) {
+			size++;
+		}
+	}
+    return size;
+}
+
+//Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
+// A utility function to search x in arr[]
+// int search(int arr[], int x, int n) {
+//     for (int i = 0; i < n; i++)
+//         if (arr[i] == x)
+//             return i;
+//     return -1;
 // }
 
-// // Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// void printPostOrder(string in[], string pre[], int n) {
-//     map<string, string> nodeToInorderIdx;
+// Prints postorder traversal from given inorder and preorder traversals
+// Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
+// void printPostOrder(int in[], int pre[], int n) {
+//     // The first element in pre[] is always root, search it
+//     // in in[] to find left and right subtrees
+//     int root = search(in, pre[0], n);
 
-//     for (int i = 0; i < n; i++) {
-//         nodeToInorderIdx.emplace(in[i], i);
-//     }
+//     // If left subtree is not empty, print left subtree
+//     if (root != 0)
+//         printPostOrder(in, pre + 1, root);
 
-//     stack<int> postOrderStack;
+//     // If right subtree is not empty, print right subtree
+//     if (root != n - 1)
+//         printPostOrder(in + root + 1, pre + root + 1, n - root - 1);
 
-//     BinaryTreeFromPreorderInorderHelper(pre, 0, n, 0, n, nodeToInorderIdx, postOrderStack);
-
-//     while (!postOrderStack.empty()) {
-//         cout << postOrderStack.top() << " ";
-//         postOrderStack.pop();
-//     }
+//     // Print root
+//     cout << pre[0] << " ";
 // }
 
-int main(int argc, char * argv[]) {
-    if(argc < 2) {
-        //std::cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
+int main(int argc, char *argv[]) {
+    // if(argc < 2) {
+    //     //std::cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
+    //     return 1;
+    // }
+    // ArgumentManager am(argc, argv);
+    // string file = am.get("preorder");
+    // string file2 = am.get("inorder");
+    // ifstream infile(file, ios::in);
+    // ifstream infile2(file2, ios::in);
+    ifstream infile("preorder1.txt", ios::in);
+    ifstream infile2("inorder1.txt", ios::in);
+
+    string preorder;
+    if(!infile){
+        cout << "Cannot open preorder input file. Program terminates!!!" << endl;
         return 1;
     }
-    ArgumentManager am(argc, argv);
-    string fpreorder = am.get("preorder");
-    string finorder = am.get("inorder");
-    ifstream fspreorder(fpreorder, ios::in);
-    ifstream fsinorder(finorder, ios::in);
-    // ifstream fspreorder("preorder1.txt", ios::in);
-    // ifstream fsinorder("inorder1.txt", ios::in);
-    string spreorder;
-    string sinorder;
-
-    cout << "\tPreorder: ";
-    while(getline(fspreorder, spreorder)) {
-        if(spreorder.empty() || spreorder.at(0) == '\n') { continue; }
-        cout << spreorder << " ";
+    while(getline(infile, preorder)){
+        if(preorder.empty() || preorder.at(0) == '\n') { continue; }
     }
-    cout << endl;
+	infile.close();
 
-    cout << "\tInorder: ";
-    while(getline(fsinorder, sinorder)) {
-        if(sinorder.empty() || sinorder.at(0) == '\n') { continue; }
-        cout << sinorder << " ";
+    string inorder;
+    if(!infile2) {
+        cout << "Cannot open inorder input file. Program terminates!!!" << endl;
+        return 1;
     }
-    cout << endl;
+    while(getline(infile2, inorder)) {
+        if(inorder.empty() || inorder.at(0) == '\n') { continue; }
+    }
+    infile2.close();
 
-    int size_p = sizeof(spreorder) / sizeof(spreorder[0]);
-    int size_i = sizeof(sinorder) / sizeof(sinorder[0]);
+	stringstream ss(preorder);
+	istream_iterator<string> begin(ss);
+	istream_iterator<string> end;
+	vector<string> vpreorder(begin, end);
+	copy(vpreorder.begin(), vpreorder.end(), ostream_iterator<string>(cout, "\n"));
 
-    cout << "\tSize of preorder: " << size_p << endl;
-    cout << "\tSize of inorder: " << size_i << endl;
-    
-    
+    stringstream ss(inorder);
+	istream_iterator<string> begin(ss);
+	istream_iterator<string> end;
+	vector<string> vinorder(begin, end);
+	copy(vinorder.begin(), vinorder.end(), ostream_iterator<string>(cout, "\n"));
 
-    // int in[] = {1,2,3,4,5,6,7,8};
-    // int pre[] = {5,2,1,4,3,7,6,8};
+	vpreorder.
+
     // int n = sizeof(in) / sizeof(in[0]);
-    // cout << "\tPostorder traversal " << endl;
-    // cout << "\t";
+    // cout << "Postorder traversal " << endl;
     // printPostOrder(in, pre, n);
-    // cout << endl;
+
+    // BigNumber bignumberinorder(inorder);
+	// BigNumber bignumberpreorder(preorder);
+	// BigNumber a;
+	// a.postorder(bignumberinorder, bignumberpreorder);
+
+	getchar();
+
     return 0;
 }
