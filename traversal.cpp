@@ -1,98 +1,167 @@
 #include <iostream>
-#include <stack>
 #include <fstream>
 #include <string>
-#include <deque>
 #include <vector>
+#include <iterator>
+#include <numeric>
 #include "ArgumentManager.h"
 
 using namespace std;
 
-class BigNumber {
-public:
-    BigNumber() {}
+template <long int T_begin, long int T_end>
+class range_class {
+  public:
+    class iterator : public std::iterator<std::random_access_iterator_tag, long int, long int> {
+        friend class range_class;
 
-    ~BigNumber(){ /*cout << "BN ~" << endl;*/ }
+      public:
+        long int operator*() const { return i_; }
 
-    BigNumber(string str) {
-		int index = 0;
-        while (index < str.size()) {
-			if (!isspace(str.at(index))) {
-				int length = 1;
-				while (isspace(str.at(length)) == 0) {
-					length++;
-				}
-				data.push_back(str.substr(index, length));
-			}
-            index++;
+        const iterator &operator++() {
+            if (T_begin > T_end)
+                --i_;
+            else
+                ++i_;
+            return *this;
         }
-    }
 
-    BigNumber(BigNumber const & other) {
-        //cout << "BN copy" << endl;
-        data = other.data;
-    }
+        const iterator &operator--() {
+            if (T_begin > T_end)
+                ++i_;
+            else
+                --i_;
+            return *this;
+        }
 
-    BigNumber & operator= (BigNumber const & other) {
-        //cout << "BN =" << endl;
-        data = other.data;
-        return *this;
-    }
+        iterator operator++(int) {
+            iterator copy(*this);
+            if (T_begin > T_end)
+                --i_;
+            else
+                ++i_;
+            return copy;
+        }
 
-    void swap(BigNumber & other) {
-        data.swap(other.data);
-    }
+        iterator operator--(int) {
+            iterator copy(*this);
+            if (T_begin > T_end)
+                ++i_;
+            else
+                --i_;
+            return copy;
+        }
 
-    void postorder(BigNumber & inorder, BigNumber & preorder) {
-		string root = preorder.data.at(0);
-		cout << root << endl;
-        //find first element of preorder in inorder
-        //Everything to the left of inorder is in the left subtree
-        //Everything to the right of inorder is in the right subtree
-        //place first element of preorder into a stack
-    }
+        iterator &operator=(const iterator &other) {
+            this->i_ = other.i_;
+            return *this;
+        }
 
-private:
-    deque<string> data;
+        bool operator==(const iterator &other) const { return i_ == other.i_; }
+        bool operator!=(const iterator &other) const { return i_ != other.i_; }
+        bool operator<(const iterator &other) const { return i_ < other.i_; }
+        bool operator>(const iterator &other) const { return i_ > other.i_; }
+        bool operator<=(const iterator &other) const { return i_ <= other.i_; }
+        bool operator>=(const iterator &other) const { return i_ >= other.i_; }
+
+        iterator &operator+(const long int &add) const {
+            iterator copy(*this);
+            auto t = std::abs(T_begin - T_end);
+            auto v = std::abs(this->i_ - T_begin);
+            auto val = ((v + add) % t) < 0 ? ((v + add) % t) + t : ((v + add) % t);
+            if (T_begin > T_end)
+                copy.i_ = T_begin - val;
+            else
+                copy.i_ = T_begin + val;
+            return copy;
+        }
+
+        iterator &operator+=(const long int &add) {
+            auto t = std::abs(T_begin - T_end);
+            auto v = std::abs(this->i_ - T_begin);
+            auto val = ((v + add) % t) < 0 ? ((v + add) % t) + t : ((v + add) % t);
+            if (T_begin > T_end)
+                this->i_ = T_begin - val;
+            else
+                this->i_ = T_begin + val;
+            return *this;
+        }
+
+        iterator &operator-(const long int &add) const {
+            iterator copy(*this);
+            auto t = std::abs(T_begin - T_end);
+            auto v = std::abs(this->i_ - T_begin);
+            auto val = ((v - add) % t) < 0 ? ((v - add) % t) + t : ((v - add) % t);
+            if (T_begin > T_end)
+                copy.i_ = T_begin - val;
+            else
+                copy.i_ = T_begin + val;
+            return copy;
+        }
+
+        iterator &operator-=(const long int &add) {
+            auto t = std::abs(T_begin - T_end);
+            auto v = std::abs(this->i_ - T_begin);
+            auto val = ((v - add) % t) < 0 ? ((v - add) % t) + t : ((v - add) % t);
+            if (T_begin > T_end)
+                this->i_ = T_begin - val;
+            else
+                this->i_ = T_begin + val;
+            return *this;
+        }
+
+        long int &operator[](const long int &n) const {
+            auto t = std::abs(T_begin - T_end);
+            auto v = std::abs(this->i_ - T_begin);
+            auto val = ((v + n) % t) < 0 ? ((v + n) % t) + t : ((v + n) % t);
+            if (T_begin > T_end)
+                return (T_begin - val);
+            else
+                return (T_begin + val);
+        }
+
+      protected:
+        iterator(long int start) : i_(start) {}
+
+      private:
+        unsigned long i_;
+    };
+
+    iterator begin() const { return iterator(T_begin); }
+    iterator end() const { return iterator(T_end); }
 };
 
-int size(string str) {
-    int size = 0;
-	for (int i = 0; i < str.size(); ++i) {
-		if (!isspace(str.at(i))) {
-			size++;
-		}
-	}
-    return size;
+template <long int T_begin, long int T_end>
+const range_class<T_begin, T_end>
+range() {
+    return range_class<T_begin, T_end>();
 }
 
-//Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// A utility function to search x in arr[]
-// int search(int arr[], int x, int n) {
-//     for (int i = 0; i < n; i++)
-//         if (arr[i] == x)
-//             return i;
-//     return -1;
-// }
+int search(vector<string> & inorder, vector<string> & preorder, int size) {
+	for (int unsigned i = 0; i < size; i++) {
+		if (inorder.at(i) == preorder.at(0)) {
+            return i;
+		}
+	}
+    return -1;
+}
 
-// Prints postorder traversal from given inorder and preorder traversals
-// Function from http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/
-// void printPostOrder(int in[], int pre[], int n) {
-//     // The first element in pre[] is always root, search it
-//     // in in[] to find left and right subtrees
-//     int root = search(in, pre[0], n);
+void printPostOrder(vector<string> & inorder, vector<string> & preorder, int size) {
+    // The first element in pre[] is always root, search it
+    // in in[] to find left and right subtrees
+    //int root = search(inorder, preorder, size);
 
-//     // If left subtree is not empty, print left subtree
-//     if (root != 0)
-//         printPostOrder(in, pre + 1, root);
+    //// If left subtree is not empty, print left subtree
+    //if (root != 0){
+    //    printPostOrder(inorder, preorder + 1, root);
+    //}
 
-//     // If right subtree is not empty, print right subtree
-//     if (root != n - 1)
-//         printPostOrder(in + root + 1, pre + root + 1, n - root - 1);
+    //// If right subtree is not empty, print right subtree
+    //if (root != size - 1)
+    //    printPostOrder(inorder + root + 1, preorder + root + 1, size - root - 1);
 
-//     // Print root
-//     cout << pre[0] << " ";
-// }
+    //// Print root
+    //cout << preorder.at(0) << " ";
+}
 
 int main(int argc, char *argv[]) {
     // if(argc < 2) {
@@ -131,24 +200,22 @@ int main(int argc, char *argv[]) {
 	istream_iterator<string> begin(ss);
 	istream_iterator<string> end;
 	vector<string> vpreorder(begin, end);
-	copy(vpreorder.begin(), vpreorder.end(), ostream_iterator<string>(cout, "\n"));
 
-    stringstream ss(inorder);
-	istream_iterator<string> begin(ss);
-	istream_iterator<string> end;
-	vector<string> vinorder(begin, end);
-	copy(vinorder.begin(), vinorder.end(), ostream_iterator<string>(cout, "\n"));
+    stringstream ss2(inorder);
+	istream_iterator<string> begin2(ss2);
+	istream_iterator<string> end2;
+	vector<string> vinorder(begin2, end2);
 
-	vpreorder.
+	int size = vinorder.size();
 
-    // int n = sizeof(in) / sizeof(in[0]);
-    // cout << "Postorder traversal " << endl;
-    // printPostOrder(in, pre, n);
+    for (auto i : range<10, -1>()) {
+        // stuff with i
+        cout << i << endl;
+    }
+    auto one = range<10, -1>();
+    cout << accumulate(one.begin(), one.end(), 0) << endl;
 
-    // BigNumber bignumberinorder(inorder);
-	// BigNumber bignumberpreorder(preorder);
-	// BigNumber a;
-	// a.postorder(bignumberinorder, bignumberpreorder);
+    printPostOrder(vinorder, vpreorder, size);
 
 	getchar();
 
