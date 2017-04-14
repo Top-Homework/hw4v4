@@ -20,19 +20,19 @@ int search(vector<string>::iterator iti, string x, int size) {
 
 // Prints postorder traversal from given inorder and preorder traversals
 // Recursive algorithm from Geeks for Geeks
-void printPostOrder(vector<string>::iterator iti, vector<string>::iterator itp, int size) {
+void postorder(vector<string>::iterator iti, vector<string>::iterator itp, int size) {
     // The first element in pre[] is always root, search it
     // in in[] to find left and right subtrees
 	int root = search(iti, itp[0], size);
 
     // If left subtree is not empty, print left subtree
     if (root != 0) {
-        printPostOrder(iti, itp + 1, root);
+        postorder(iti, itp + 1, root);
     }
 
     // If right subtree is not empty, print right subtree
 	if (root != size - 1) {
-        printPostOrder(iti + root + 1, itp + root + 1, size - root - 1);
+        postorder(iti + root + 1, itp + root + 1, size - root - 1);
 	}
 
     // Print root
@@ -95,6 +95,6 @@ int main(int argc, char *argv[]) {
 
 	int size = vinorder.size();
 
-    printPostOrder(iti, itp, size);
+    postorder(iti, itp, size);
     return 0;
 }

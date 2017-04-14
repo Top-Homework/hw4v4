@@ -36,5 +36,4 @@
 *.stderr
 *.stdout
 TIMEOUT
-main
 traversal
