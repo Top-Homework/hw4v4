@@ -3,12 +3,12 @@
 #include <string>
 #include <vector>
 #include <iterator>
-#include <numeric>
 #include "ArgumentManager.h"
 
 using namespace std;
 
 // A utility function to search x in arr[] of size n
+// Function from Geeks for Geeks
 int search(vector<string>::iterator iti, string x, int size) {
 	for (int i = 0; i < size; i++) {
 		if (iti[i] == x) {
@@ -19,6 +19,7 @@ int search(vector<string>::iterator iti, string x, int size) {
 }
 
 // Prints postorder traversal from given inorder and preorder traversals
+// Recursive algorithm from Geeks for Geeks
 void printPostOrder(vector<string>::iterator iti, vector<string>::iterator itp, int size) {
     // The first element in pre[] is always root, search it
     // in in[] to find left and right subtrees
@@ -39,35 +40,43 @@ void printPostOrder(vector<string>::iterator iti, vector<string>::iterator itp, 
 }
 
 int main(int argc, char *argv[]) {
-    // if(argc < 2) {
-    //     //std::cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
-    //     return 1;
-    // }
-    // ArgumentManager am(argc, argv);
-    // string file = am.get("preorder");
-    // string file2 = am.get("inorder");
-    // ifstream infile(file, ios::in);
-    // ifstream infile2(file2, ios::in);
-    ifstream infile("preorder1.txt", ios::in);
-    ifstream infile2("inorder1.txt", ios::in);
+    if(argc < 2) {
+       //cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
+       return 1;
+    }
+    ArgumentManager am(argc, argv);
+    string file = am.get("preorder");
+    string file2 = am.get("inorder");
+    ifstream infile(file, ios::in);
+    ifstream infile2(file2, ios::in);
 
-    string preorder;
+    // Used for debugging on Visual Studio
+    //  ifstream infile("pre1.txt", ios::in);
+    //  ifstream infile2("in1.txt", ios::in);
+
     if(!infile){
         cout << "Cannot open preorder input file. Program terminates!!!" << endl;
         return 1;
     }
-    while(getline(infile, preorder)){
-        if(preorder.empty() || preorder.at(0) == '\n') { continue; }
+    string preorder;
+    while(getline(infile, preorder, '\0')){
+        if(preorder.empty() || preorder.at(0) == '\n') { 
+			continue; 
+		}
+		preorder.erase(preorder.end() - 1);
     }
 	infile.close();
 
-    string inorder;
     if(!infile2) {
         cout << "Cannot open inorder input file. Program terminates!!!" << endl;
         return 1;
     }
-    while(getline(infile2, inorder)) {
-        if(inorder.empty() || inorder.at(0) == '\n') { continue; }
+    string inorder;
+    while(getline(infile2, inorder, '\0')) {
+        if(inorder.empty() || inorder.at(0) == '\n') {
+			continue; 
+		}
+		inorder.erase(inorder.end() - 1);
     }
     infile2.close();
 
@@ -87,6 +96,5 @@ int main(int argc, char *argv[]) {
 	int size = vinorder.size();
 
     printPostOrder(iti, itp, size);
-	cout << endl;
     return 0;
 }

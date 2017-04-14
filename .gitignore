@@ -37,3 +37,4 @@
 *.stdout
 TIMEOUT
 main
+traversal

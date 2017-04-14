@@ -1,5 +1,5 @@
-# extra10
-Simple C++ program to print postorder traversal from preorder and inorder traversals. I learned how to use iterators on this project.
+# hw4v4
+Simple C++ program to print postorder traversal from preorder and inorder traversals. I learned how to use iterators on this project and reinforced vectors.
 
 ## Iterators
 * [Documentation](http://www.cplusplus.com/reference/iterator/)
@@ -14,8 +14,16 @@ Simple C++ program to print postorder traversal from preorder and inorder traver
 		* Bidirectional iterators are like forward iterators but can also be iterated through backwards.
 	5. Random Access
 		* Random-access iterators implement all the functionality of bidirectional iterators, and also have the ability to access ranges non-sequentially: distant elements can be accessed directly by applying an offset value to an iterator without iterating through all the elements in between. These iterators have a similar functionality to standard pointers (pointers are iterators of this category).
+* Notes
+	* This [video](https://youtu.be/vO2AlrBf5rQ) provided a great foundation on iterators.
+	* Chapter 4 STL of the textbook Data Structures Using C++ provided a much better understanding of iterators.
+	* Finally, the C++ documentation reinforced the concepts
 
-## string functions
+## Vectors
+* [Documentation](http://www.cplusplus.com/reference/vector/)
+* I used vectors to implement my program. I believe if I had left the data in strings I could have accomplished everything a vector does. I will have to implement it to test this theory. 
+
+## string
 * assign() - [Documentation](http://www.cplusplus.com/reference/string/string/assign/)
 	* Copies one string into another
 * at() - [Documentation](http://www.cplusplus.com/reference/string/string/at/)
@@ -51,3 +59,7 @@ Simple C++ program to print postorder traversal from preorder and inorder traver
 	* 2 parameters
 		1. Where do you want to begin inserting at
 		2. What string do you want to insert
+
+## Geeks for Geeks
+* Finally, I used Geeks for Geeks recursive algorithm to implement the postorder traversal of a tree.
+[Link](http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/)
