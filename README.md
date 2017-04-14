@@ -1,5 +1,5 @@
 # hw4v4
-Simple C++ program to print postorder traversal from preorder and inorder traversals. I learned how to use iterators on this project and reinforced vectors.
+Simple C++ program to print postorder traversal from preorder and inorder traversals. I learned how to use iterators on this project and also reinforced vector containers.
 
 ## Iterators
 * [Documentation](http://www.cplusplus.com/reference/iterator/)
@@ -62,4 +62,4 @@ Simple C++ program to print postorder traversal from preorder and inorder traver
 
 ## Geeks for Geeks
 * Finally, I used Geeks for Geeks recursive algorithm to implement the postorder traversal of a tree.
-[Link](http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/)
+* [Link](http://www.geeksforgeeks.org/print-postorder-from-given-inorder-and-preorder-traversals/)
