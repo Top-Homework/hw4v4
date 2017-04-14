@@ -1,5 +1,19 @@
 # extra10
-Simple C++ program to print postorder traversal from preorder and inorder traversals
+Simple C++ program to print postorder traversal from preorder and inorder traversals. I learned how to use iterators on this project.
+
+## Iterators
+* [Documentation](http://www.cplusplus.com/reference/iterator/)
+* An iterator is literally a pointer. It points to some element in a range of elements such as an array or a container like a list, BUT not all iterators have the same functionality as pointers. Iterators are classified into five different categories
+* Types of iterators
+	1. Input
+	2. Output
+		* Input and output iterators are the most limited types of iterators: they can perform sequential single-pass input or output operations.
+	3. Forward
+		* Forward iterators have all the functionality of input iterators and -if they are not constant iterators- also the functionality of output iterators, although they are limited to one direction in which to iterate through a range (forward). All standard containers support at least forward iterator types.
+	4. Bidirectional
+		* Bidirectional iterators are like forward iterators but can also be iterated through backwards.
+	5. Random Access
+		* Random-access iterators implement all the functionality of bidirectional iterators, and also have the ability to access ranges non-sequentially: distant elements can be accessed directly by applying an offset value to an iterator without iterating through all the elements in between. These iterators have a similar functionality to standard pointers (pointers are iterators of this category).
 
 ## string functions
 * assign() - [Documentation](http://www.cplusplus.com/reference/string/string/assign/)
