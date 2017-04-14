@@ -1,10 +1,10 @@
 
 filename="traversal"
-casecount=4
+casecount=5
 # maximum time allowed for each run
 timeout="10s"
 #       0   1  2  3  4  5  6  7  8  9                                                                              
-weight=(0  10 10 10 10 )
+weight=(0  10 10 10 10 10)
 # base grade is 10 if code can compile successful
 baseGrade=10
 # color constants                                                                                                  

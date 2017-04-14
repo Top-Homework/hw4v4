@@ -41,8 +41,8 @@ void postorder(vector<string>::iterator iti, vector<string>::iterator itp, int s
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-       //cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
-       return 1;
+     //cerr("Usage: traversal \"preorder=xyz.txt;inorder=xyz.txt\"\n");
+     return 1;
     }
     ArgumentManager am(argc, argv);
     string file = am.get("preorder");
@@ -51,8 +51,8 @@ int main(int argc, char *argv[]) {
     ifstream infile2(file2, ios::in);
 
     // Used for debugging on Visual Studio
-    //  ifstream infile("pre1.txt", ios::in);
-    //  ifstream infile2("in1.txt", ios::in);
+    // ifstream infile("pre1.txt", ios::in);
+    // ifstream infile2("in1.txt", ios::in);
 
     if(!infile){
         cout << "Cannot open preorder input file. Program terminates!!!" << endl;
@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
         if(preorder.empty() || preorder.at(0) == '\n') { 
 			continue; 
 		}
-		preorder.erase(preorder.end() - 1);
     }
 	infile.close();
 
@@ -76,9 +75,16 @@ int main(int argc, char *argv[]) {
         if(inorder.empty() || inorder.at(0) == '\n') {
 			continue; 
 		}
-		inorder.erase(inorder.end() - 1);
     }
     infile2.close();
+
+    // If there is an end of line character then delete it
+	if (preorder.back() == '\n') {
+		preorder.erase(preorder.end() - 1);
+	}
+	if (inorder.back() == '\n') {
+		inorder.erase(inorder.end() - 1);
+	}
 
 	stringstream ss(preorder);
 	istream_iterator<string> begin(ss);
