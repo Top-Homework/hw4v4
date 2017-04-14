@@ -8,159 +8,34 @@
 
 using namespace std;
 
-template <long int T_begin, long int T_end>
-class range_class {
-  public:
-    class iterator : public std::iterator<std::random_access_iterator_tag, long int, long int> {
-        friend class range_class;
-
-      public:
-        long int operator*() const { return i_; }
-
-        const iterator &operator++() {
-            if (T_begin > T_end)
-                --i_;
-            else
-                ++i_;
-            return *this;
-        }
-
-        const iterator &operator--() {
-            if (T_begin > T_end)
-                ++i_;
-            else
-                --i_;
-            return *this;
-        }
-
-        iterator operator++(int) {
-            iterator copy(*this);
-            if (T_begin > T_end)
-                --i_;
-            else
-                ++i_;
-            return copy;
-        }
-
-        iterator operator--(int) {
-            iterator copy(*this);
-            if (T_begin > T_end)
-                ++i_;
-            else
-                --i_;
-            return copy;
-        }
-
-        iterator &operator=(const iterator &other) {
-            this->i_ = other.i_;
-            return *this;
-        }
-
-        bool operator==(const iterator &other) const { return i_ == other.i_; }
-        bool operator!=(const iterator &other) const { return i_ != other.i_; }
-        bool operator<(const iterator &other) const { return i_ < other.i_; }
-        bool operator>(const iterator &other) const { return i_ > other.i_; }
-        bool operator<=(const iterator &other) const { return i_ <= other.i_; }
-        bool operator>=(const iterator &other) const { return i_ >= other.i_; }
-
-        iterator &operator+(const long int &add) const {
-            iterator copy(*this);
-            auto t = std::abs(T_begin - T_end);
-            auto v = std::abs(this->i_ - T_begin);
-            auto val = ((v + add) % t) < 0 ? ((v + add) % t) + t : ((v + add) % t);
-            if (T_begin > T_end)
-                copy.i_ = T_begin - val;
-            else
-                copy.i_ = T_begin + val;
-            return copy;
-        }
-
-        iterator &operator+=(const long int &add) {
-            auto t = std::abs(T_begin - T_end);
-            auto v = std::abs(this->i_ - T_begin);
-            auto val = ((v + add) % t) < 0 ? ((v + add) % t) + t : ((v + add) % t);
-            if (T_begin > T_end)
-                this->i_ = T_begin - val;
-            else
-                this->i_ = T_begin + val;
-            return *this;
-        }
-
-        iterator &operator-(const long int &add) const {
-            iterator copy(*this);
-            auto t = std::abs(T_begin - T_end);
-            auto v = std::abs(this->i_ - T_begin);
-            auto val = ((v - add) % t) < 0 ? ((v - add) % t) + t : ((v - add) % t);
-            if (T_begin > T_end)
-                copy.i_ = T_begin - val;
-            else
-                copy.i_ = T_begin + val;
-            return copy;
-        }
-
-        iterator &operator-=(const long int &add) {
-            auto t = std::abs(T_begin - T_end);
-            auto v = std::abs(this->i_ - T_begin);
-            auto val = ((v - add) % t) < 0 ? ((v - add) % t) + t : ((v - add) % t);
-            if (T_begin > T_end)
-                this->i_ = T_begin - val;
-            else
-                this->i_ = T_begin + val;
-            return *this;
-        }
-
-        long int &operator[](const long int &n) const {
-            auto t = std::abs(T_begin - T_end);
-            auto v = std::abs(this->i_ - T_begin);
-            auto val = ((v + n) % t) < 0 ? ((v + n) % t) + t : ((v + n) % t);
-            if (T_begin > T_end)
-                return (T_begin - val);
-            else
-                return (T_begin + val);
-        }
-
-      protected:
-        iterator(long int start) : i_(start) {}
-
-      private:
-        unsigned long i_;
-    };
-
-    iterator begin() const { return iterator(T_begin); }
-    iterator end() const { return iterator(T_end); }
-};
-
-template <long int T_begin, long int T_end>
-const range_class<T_begin, T_end>
-range() {
-    return range_class<T_begin, T_end>();
-}
-
-int search(vector<string> & inorder, vector<string> & preorder, int size) {
-	for (int unsigned i = 0; i < size; i++) {
-		if (inorder.at(i) == preorder.at(0)) {
+// A utility function to search x in arr[] of size n
+int search(vector<string>::iterator iti, string x, int size) {
+	for (int i = 0; i < size; i++) {
+		if (iti[i] == x) {
             return i;
 		}
 	}
-    return -1;
+	return -1;
 }
 
-void printPostOrder(vector<string> & inorder, vector<string> & preorder, int size) {
+// Prints postorder traversal from given inorder and preorder traversals
+void printPostOrder(vector<string>::iterator iti, vector<string>::iterator itp, int size) {
     // The first element in pre[] is always root, search it
     // in in[] to find left and right subtrees
-    //int root = search(inorder, preorder, size);
+	int root = search(iti, itp[0], size);
 
-    //// If left subtree is not empty, print left subtree
-    //if (root != 0){
-    //    printPostOrder(inorder, preorder + 1, root);
-    //}
+    // If left subtree is not empty, print left subtree
+    if (root != 0) {
+        printPostOrder(iti, itp + 1, root);
+    }
 
-    //// If right subtree is not empty, print right subtree
-    //if (root != size - 1)
-    //    printPostOrder(inorder + root + 1, preorder + root + 1, size - root - 1);
+    // If right subtree is not empty, print right subtree
+	if (root != size - 1) {
+        printPostOrder(iti + root + 1, itp + root + 1, size - root - 1);
+	}
 
-    //// Print root
-    //cout << preorder.at(0) << " ";
+    // Print root
+    cout << itp[0] << " ";
 }
 
 int main(int argc, char *argv[]) {
@@ -206,18 +81,12 @@ int main(int argc, char *argv[]) {
 	istream_iterator<string> end2;
 	vector<string> vinorder(begin2, end2);
 
+	vector<string>::iterator iti = vinorder.begin();
+	vector<string>::iterator itp = vpreorder.begin();
+
 	int size = vinorder.size();
 
-    for (auto i : range<10, -1>()) {
-        // stuff with i
-        cout << i << endl;
-    }
-    auto one = range<10, -1>();
-    cout << accumulate(one.begin(), one.end(), 0) << endl;
-
-    printPostOrder(vinorder, vpreorder, size);
-
-	getchar();
-
+    printPostOrder(iti, itp, size);
+	cout << endl;
     return 0;
 }
